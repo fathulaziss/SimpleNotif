@@ -4,8 +4,11 @@ import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -59,8 +62,17 @@ public class MainActivity extends AppCompatActivity {
 
     //aksi untuk onClick pada button
     public void sendNotification(View view) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://dicoding.com"));
+        PendingIntent pendingIntent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        }
+
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.baseline_notifications_active_24)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.baseline_notifications_active_24))
                 .setContentTitle(getResources().getString(R.string.notification_title))
